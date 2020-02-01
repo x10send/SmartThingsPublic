@@ -46,6 +46,7 @@ definition(
     iconX2Url: "https://rawgit.com/DarwinsDen/SmartThingsPublic/master/resources/icons/pwLogoAlphaCentered.png"
 )
 
+
 preferences {
     page(name: "pageMain")
     page(name: "verifyPowerwalls")
