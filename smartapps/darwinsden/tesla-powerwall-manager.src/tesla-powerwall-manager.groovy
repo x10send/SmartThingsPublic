@@ -497,7 +497,6 @@ String getTokenDateString() {
 }
 
 def refreshAccessToken(){
-    //TODO: Make this well factored....
     if (!inputRefreshToken || inputRefreshToken == ""){
         logger ("refreshAccessToken no refresh token defined, aborting")
         return
@@ -2036,13 +2035,17 @@ def commandGoOffGrid(data) {
 }
 
 def goOffGrid(child){
-    logger ("commanding go off grid","debug")
-    runIn(2, commandGoOffGrid, [data: [isOnGrid:false]])
+    if (!hubIsSt()){
+        logger ("commanding go off grid","debug")
+        runIn(2, commandGoOffGrid, [data: [isOnGrid:false]])
+    }
 }
 
 def goOnGrid(child){
-    logger ("commanding go on grid","debug")
-    runIn(2, commandGoOffGrid, [data: [isOnGrid:true]])
+    if (!hubIsSt()){
+        logger ("commanding go on grid","debug")
+        runIn(2, commandGoOffGrid, [data: [isOnGrid:true]])
+    }
 }
 
 def setBackupReservePercent(child, value) {
