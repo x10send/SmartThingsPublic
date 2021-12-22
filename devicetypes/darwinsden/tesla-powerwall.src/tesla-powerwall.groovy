@@ -1,5 +1,5 @@
 /**
- *  Tesla Powerwall 
+ *  Tesla Powerwall
  *
  *  Copyright 2019, 2020, 2021 DarwinsDen.com
  *
@@ -12,14 +12,14 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
- *   	19-Dec-2021 >>> v0.2.10.20211219 - Added argument for setBackupReservePercent
- *	24-Oct-2021 >>> v0.2.10.20211024 - Added argument for setBackupReservePercent
- *	25-May-2020 >>> v0.2.0e.20200525 - Updated reserve +/- adjust for Hubitat
- *	02-Jul-2020 >>> v0.1.5e.20200702 - Added attribute Tile 
- *	22-Jan-2020 >>> v0.1.4e.20200122 - Added stormwatch enable/disable commands
- *	12-Aug-2019 >>> v0.1.3e.20190812 - Added grid/outage status/display
- *	29-Jul-2019 >>> v0.1.2e.20190729 - Disable reserve percent controls in backup-only mode
- *	23-Jul-2019 >>> v0.1.1e.20190723 - Initial beta release
+ *       19-Dec-2021 >>> v0.2.10.20211219 - Added argument for setBackupReservePercent
+ *    24-Oct-2021 >>> v0.2.10.20211024 - Added argument for setBackupReservePercent
+ *    25-May-2020 >>> v0.2.0e.20200525 - Updated reserve +/- adjust for Hubitat
+ *    02-Jul-2020 >>> v0.1.5e.20200702 - Added attribute Tile
+ *    22-Jan-2020 >>> v0.1.4e.20200122 - Added stormwatch enable/disable commands
+ *    12-Aug-2019 >>> v0.1.3e.20190812 - Added grid/outage status/display
+ *    29-Jul-2019 >>> v0.1.2e.20190729 - Disable reserve percent controls in backup-only mode
+ *    23-Jul-2019 >>> v0.1.1e.20190723 - Initial beta release
  *
  */
 
@@ -39,10 +39,10 @@ metadata {
 
         attribute "reservePercent", "number"
         attribute "reserve_pending", "number"
-		attribute "solarPower", "number"
-		attribute "loadPower", "number"
-		attribute "gridPower", "number"
-		attribute "powerwallPower", "number"
+        attribute "solarPower", "number"
+        attribute "loadPower", "number"
+        attribute "gridPower", "number"
+        attribute "powerwallPower", "number"
         attribute "currentOpState", "string"
         attribute "currentStrategy", "string"
         attribute "siteName", "string"
@@ -65,9 +65,9 @@ metadata {
         command "refreshAuth"
     }
 
-    preferences {}
+    preferences { }
 
-    simulator {}
+    simulator { }
 
     tiles(scale: 2) {
         multiAttributeTile(name: "powerwallDisplay", type: "thermostat", width: 6, height: 4, canChangeIcon: true) {
@@ -162,7 +162,7 @@ metadata {
             state "Balanced", label: 'Bal', action: "setTbcBalanced", backgroundColor: "#79b821", icon: "https://rawgit.com/DarwinsDen/SmartThingsPublic/master/resources/icons/wavex1-1.png"
             state "Pending Balanced", label: 'Bal', action: "setTbcBalanced", backgroundColor: "#2179b8", icon: "https://rawgit.com/DarwinsDen/SmartThingsPublic/master/resources/icons/wavex1-1.png"
         }
-        main(["power","battery"])
+        main(["power", "battery"])
         details(["powerwallDisplay", "sitename", "refresh", "solar", "grid", "battery", "load", "powerwall", "strategy", "stormwatch", "blank",
             "commandBar", "blank", "backup", "self-consumption", "time-based", "blankTall", "balanced", "cost-saving", "blankTall"
         ])
@@ -189,16 +189,16 @@ def setTbcCostSaving() {
     parent.setTbcCostSaving(this)
 }
 
-def goOffGrid(){
-     parent.goOffGrid(this)   
+def goOffGrid() {
+    parent.goOffGrid(this)
 }
 
-def goOnGrid(){
-     parent.goOnGrid(this)   
+def goOnGrid() {
+    parent.goOnGrid(this)
 }
 
-def refreshAuth(){
-     parent.refreshAccessToken()   
+def refreshAuth() {
+    parent.refreshAccessToken()
 }
 
 def enableStormwatch() {
@@ -219,41 +219,41 @@ def setBackupReservePercentHandler(data) {
 
 def lowerBackupReserve(value) {
     if (device.currentValue("currentOpState").toString() != "Backup-Only") {
-       Integer brp 
-       if (device.currentValue("reserve_pending")) {
+        Integer brp
+        if (device.currentValue("reserve_pending")) {
             brp = device.currentValue("reserve_pending").toInteger()
        } else {
             brp = device.currentValue("reservePercent").toInteger()
-       }
-       if (!brp || state.lastReserveSetTime == null || ((now() - state.lastReserveSetTime) > 20 * 1000)) {
-           brp = device.currentValue("reservePercent").toInteger()
-       }
-       if (brp > 0) {
-           brp = brp - 1
-           runIn(10, setBackupReservePercentHandler, [data: [value: brp]])
-           state.lastReserveSetTime = now()
-           sendEvent(name: "reserve_pending", value: brp, displayed: false)
-       }
+        }
+        if (!brp || state.lastReserveSetTime == null || ((now() - state.lastReserveSetTime) > 20 * 1000)) {
+            brp = device.currentValue("reservePercent").toInteger()
+        }
+        if (brp > 0) {
+            brp = brp - 1
+            runIn(10, setBackupReservePercentHandler, [data: [value: brp]])
+            state.lastReserveSetTime = now()
+            sendEvent(name: "reserve_pending", value: brp, displayed: false)
+        }
     }
 }
 
 def raiseBackupReserve(value) {
     if (device.currentValue("currentOpState").toString() != "Backup-Only") {
-       Integer brp 
-       if (device.currentValue("reserve_pending")) {
+        Integer brp
+        if (device.currentValue("reserve_pending")) {
             brp = device.currentValue("reserve_pending").toInteger()
        } else {
             brp = device.currentValue("reservePercent").toInteger()
-       }
-       if (!brp || state.lastReserveSetTime == null || ((now() - state.lastReserveSetTime) > 20 * 1000)) {
-           brp = device.currentValue("reservePercent").toInteger()
-       }
-       if (brp < 100) {
-           brp = brp + 1
-           runIn(10, setBackupReservePercentHandler, [data: [value: brp]])
-           state.lastReserveSetTime = now()
-           sendEvent(name: "reserve_pending", value: brp, displayed: false)
-       }
+        }
+        if (!brp || state.lastReserveSetTime == null || ((now() - state.lastReserveSetTime) > 20 * 1000)) {
+            brp = device.currentValue("reservePercent").toInteger()
+        }
+        if (brp < 100) {
+            brp = brp + 1
+            runIn(10, setBackupReservePercentHandler, [data: [value: brp]])
+            state.lastReserveSetTime = now()
+            sendEvent(name: "reserve_pending", value: brp, displayed: false)
+        }
     }
 }
 
@@ -273,17 +273,16 @@ def refresh() {
 }
 
 def poll() {
-  //log.debug "poll()"
-  def status = parent.refresh(this)
+    //log.debug "poll()"
+    def status = parent.refresh(this)
 }
 
-
 def initialize() {
-    //log.debug "initializing PW device"
+//log.debug "initializing PW device"
 }
 
 def ping() {
-	log.debug "pinged"	
+    log.debug "pinged"
 }
 
 def parse(String description) {
