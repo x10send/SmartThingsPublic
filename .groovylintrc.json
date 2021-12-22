@@ -1,0 +1,17 @@
+{
+    "extends": "recommended",
+    "rules": {
+        "DuplicateStringLiteral": {
+            "enabled": false
+        },
+        "LineLength": {
+            "enabled": false
+        },
+        "NoFloat": {
+            "enabled": false
+        },
+        "UnnecessaryGString": {
+            "enabled": false
+        }
+    }
+}
